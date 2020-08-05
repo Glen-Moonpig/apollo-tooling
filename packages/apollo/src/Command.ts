@@ -1,4 +1,5 @@
 import Command, { flags } from "@oclif/command";
+import { ExitError } from "@oclif/errors";
 import Listr, { ListrTask } from "listr";
 import { parse, resolve } from "path";
 
@@ -274,6 +275,9 @@ export abstract class ProjectCommand extends Command {
   async catch(err) {
     // handle any error from the command
     this.error(err);
+    if (err instanceof ExitError) {
+      throw err;
+    }
   }
   async finally(err) {
     // called after run and catch regardless of whether or not the command errored
